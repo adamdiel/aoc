@@ -15,8 +15,7 @@
 
 # Any other - error in the system
 
-def run_opcode(instruction, x, y, position, program_code)
-
+def run_instruction(instruction, x, y, position, program_code)
   if instruction == 1
     num = program_code[x] + program_code[y]
   else
@@ -28,7 +27,59 @@ def run_opcode(instruction, x, y, position, program_code)
   program_code
 end
 
+def run_opcode(program_code)
+  length = program_code.length
 
+  index = 0
+
+  (length/4).times do
+
+    opcode = program_code[index]
+    opcode_x = program_code[index+1]
+    opcode_y = program_code[index+2]
+    opcode_position = program_code[index+3]
+
+    if opcode == 99
+      break
+    elsif opcode == 1 || opcode == 2
+      program_code = run_instruction(opcode, opcode_x, opcode_y, opcode_position, program_code)
+    else
+      puts "BAD OPCODE"
+    end
+
+    index = index + 4
+  end
+
+  program_code
+end
+
+def run_on_temp(program_code, noun, verb)
+  temp_code = program_code.clone
+  temp_code[1] = noun
+  temp_code[2] = verb
+
+  run_opcode(temp_code)
+
+  temp_code[0]
+end
+
+def run(program_code)
+  noun = 0
+  verb = 0
+  target = 0
+  while noun <= 100
+    while verb <= 100
+        target = run_on_temp(program_code, noun, verb)
+        if target == 19690720
+          return 100*noun+verb
+        end
+        verb = verb+1
+    end
+    verb = 0
+    noun = noun+1
+  end
+  return -1
+end
 
 filename = ARGV[0]
 
@@ -38,27 +89,6 @@ program_code = program_code[0].split(",")
 
 program_code = program_code.map(&:to_i)
 
+final = run(program_code)
 
-length = program_code.length
-
-index = 0
-
-(length/4).times do
-
-  opcode = program_code[index].to_i
-  opcode_x = program_code[index+1].to_i
-  opcode_y = program_code[index+2].to_i
-  opcode_position = program_code[index+3].to_i
-
-  if opcode == 99
-    break
-  elsif opcode == 1 || opcode == 2
-    program_code = run_opcode(opcode, opcode_x, opcode_y, opcode_position, program_code)
-  else
-    puts "BAD OPCODE"
-  end
-
-  index = index + 4
-end
-
-puts program_code.inspect
+puts final
