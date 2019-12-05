@@ -2,7 +2,7 @@
 
 def run_navigation (nav, current_position, nav_points)
   direction = nav[0]
-  steps = nav[1].to_i
+  steps = nav[1..-1].to_i
 
   case direction
   when 'U'
@@ -54,9 +54,22 @@ end
 def find_intersects(paths)
     #Going to assume only 2 paths
     intersects = (paths[0] & paths[1])
-    puts intersects.inspect
 end
 
+def find_lowest(overlaps)
+  lowest = overlaps[0][0].abs + overlaps[0][1].abs
+
+  if overlaps.length < 2
+    return lowest
+  else
+    for n in overlaps
+      if n[0].abs + n[1].abs < lowest
+        lowest = n[0].abs + n[1].abs
+      end
+    end
+  end
+  return lowest
+end
 
 filename = ARGV[0]
 
@@ -68,6 +81,10 @@ File.readlines(filename).each do |line|
   paths.push cordinates
 end
 
-puts paths[1].inspect
-puts paths[0].inspect
-find_intersects(paths)
+overlaps = find_intersects(paths)
+
+puts overlaps.inspect
+
+distance = find_lowest(overlaps)
+
+puts distance
