@@ -71,6 +71,22 @@ def find_lowest(overlaps)
   return lowest
 end
 
+def find_steps_of_intersects(paths, overlaps)
+  lowest_steps = -1
+  for cordinate in overlaps
+    steps = 0
+    for path in paths
+      steps = steps + path.index(cordinate)
+    end
+    if lowest_steps == -1
+      lowest_steps = steps
+    elsif steps < lowest_steps
+      lowest_steps = steps
+    end
+  end
+  lowest_steps
+end
+
 filename = ARGV[0]
 
 paths = Array.new
@@ -88,3 +104,5 @@ puts overlaps.inspect
 distance = find_lowest(overlaps)
 
 puts distance
+
+puts find_steps_of_intersects(paths, overlaps)
