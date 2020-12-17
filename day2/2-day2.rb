@@ -2,15 +2,15 @@
 require 'set'
 
 def password_valid(password)
-  password_array = password.split(" ")
+  password_range, password_key, password = password.split(" ")
+  
+  minimum, maximum = password_range.split("-").map(&:to_i)
 
-  password_range = password_array[0]
-  password_key = password_array[1]
-  password = password_array[2].to_str
+  password_key = password_key.split(":")
+  password_key = password_key[0]
 
-  password_range = password_range.split("-")
-  minimum = password_range[0].to_i - 1
-  maximum = password_range[1].to_i - 1
+  minimum = minimum - 1
+  maximum = maximum - 1
 
   password_key = password_key.split(":")
   password_key = password_key[0]
