@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-require 'set'
 
 def password_valid(password)
   password_range, password_key, password = password.split(" ")
