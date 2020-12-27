@@ -1,23 +1,14 @@
 #!/usr/bin/env ruby
 
-def find_count(rules, bags, count)
-
-
-  bag = bags.pop()
-
+def find_count(rules, parents, bag)
   rules.each do | parent, child |
     match = child.select{ | key, value | key.include?(bag[0..-3])}
     unless match.empty?
-      bags << parent
-      count += 1
+      parents << parent
+      parents = find_count(rules, parents, parent)
     end 
   end
-
-  if bags.length() == 0 
-    return count
-  else
-    count = find_count(rules, bags, count)
-  end
+  parents
 end
 
 def add_child(children)
@@ -48,6 +39,7 @@ File.readlines(filename).each do |line|
   rules = add_rule(line.chomp, rules)
 end
 
-parents = ["shiny gold bag"]
-count = 0
-puts find_count(rules, parents, count)
+bag = "shiny gold bag"
+parents = []
+parents = find_count(rules, parents, bag).uniq
+puts parents.length
