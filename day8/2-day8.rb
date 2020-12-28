@@ -29,10 +29,10 @@ end
 def get_accumulator(instructions)
   acc = 0
   instruction_index = 0
-  index_array = []
 
   instructions.each_with_index do | line, index|
-    local_copy = instructions
+    index_array = []
+    local_copy = instructions.clone
     instruction_array = line.split(" ")
     instruction = instruction_array[0]
     num = instruction_array[1]
@@ -41,7 +41,7 @@ def get_accumulator(instructions)
     elsif instruction == 'jmp'
       local_copy[index] = "nop " + num
     end
-    check_loop = run_program(instructions, acc, instruction_index, index_array)
+    check_loop = run_program(local_copy, acc, instruction_index, index_array)
     if check_loop[1]  == true
       return check_loop[0]
     end
