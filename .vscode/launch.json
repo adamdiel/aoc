@@ -8,8 +8,8 @@
             "name": "Debug Local File",
             "type": "Ruby",
             "request": "launch",
-            "program": "${workspaceRoot}/day8/2-day8.rb",
-            "args": ["${workspaceRoot}/day8/test.txt"],
+            "program": "${workspaceRoot}/day9/1-day9.rb",
+            "args": ["${workspaceRoot}/day9/test.txt"],
         }
     ]
 }
