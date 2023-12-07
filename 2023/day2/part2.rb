@@ -1,66 +1,48 @@
-# Number of Cubes
-RED = 12
-GREEN = 13
-BLUE = 14
-
-def grab_valid(grab)
+def get_power(grab, color_hash)
     grab = grab.split(",")
 
     grab.each do | colors | 
         color = colors.split(" ")
+        color[0] = color[0].to_i
         if color[1].upcase == "GREEN"
-            if color[0].to_i > GREEN
-                return false
-            else
-                next 
+            if color[0] > color_hash[:green]
+                color_hash[:green] = color[0]
             end
         elsif color[1].upcase == "RED"
-            if color[0].to_i > RED
-                return false
-            else
-                next 
+            if color[0] > color_hash[:red]
+                color_hash[:red] = color[0]
             end
         elsif color[1].upcase == "BLUE"
-            if color[0].to_i > BLUE
-                return false
-            else
-                next 
+            if color[0] > color_hash[:blue]
+                color_hash[:blue] = color[0]
             end
-        else
-            return false
         end
     end
-    return true
+    return color_hash
 end
 
-def game_valid(game_data)
+def get_power_sum(game_data)
+    color_hash = {
+        blue: 1,
+        red: 1,
+        green: 1
+    }
     grabs = game_data.split(";")
 
     grabs.each do | grab|
-        unless grab_valid(grab)
-            return false
-        end
+        color_hash = get_power(grab, color_hash)    
     end
-    return true
+    return color_hash[:blue] * color_hash[:red] * color_hash[:green]
 end
 
-def get_game_id(game_header)
-    id = game_header.split(" ")
-    id = id[1]
-end
-
-id_sum = 0
+power_sum = 0
 File.open(File.join(File.dirname(__FILE__), "input.txt"), "r") do |file|
     file.each_line do | line |
         game = line.split(":")
-        game_id = get_game_id(game[0]).to_i
         raw_game_data = game[1]
-
-        if game_valid(raw_game_data)
-            id_sum += game_id
-        end
+        power_sum += get_power_sum(raw_game_data)
     end
 end
 
 
-puts id_sum
+puts power_sum
