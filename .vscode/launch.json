@@ -6,12 +6,10 @@
     "configurations": [
         
         {
-            "type": "ruby-debug",
+            "type": "rdbg",
             "request": "launch",
             "name": "Active File",
-            "program": "${file}",
-            "programArgs": [],
-            "useBundler": false
+            "script": "${file}"
         }
     ]
 }
